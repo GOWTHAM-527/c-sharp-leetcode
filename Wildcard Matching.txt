@@ -1,0 +1,31 @@
+public class Solution {
+    public bool IsMatch(string s, string p) {
+        int sIdx = 0;
+        int pIdx = 0;
+        int matchIdx = 0;
+        int starIdx = -1;
+
+        while (sIdx < s.Length) {
+            if (pIdx < p.Length && (p[pIdx] == s[sIdx] || p[pIdx] == '?')) {
+                sIdx++;
+                pIdx++;
+            } else if (pIdx < p.Length && p[pIdx] == '*') {
+                starIdx = pIdx;
+                matchIdx = sIdx;
+                pIdx++;
+            } else if (starIdx != -1) {
+                pIdx = starIdx + 1;
+                matchIdx++;
+                sIdx = matchIdx;
+            } else {
+                return false;
+            }
+        }
+
+        while (pIdx < p.Length && p[pIdx] == '*') {
+            pIdx++;
+        }
+
+        return pIdx == p.Length;
+    }
+}

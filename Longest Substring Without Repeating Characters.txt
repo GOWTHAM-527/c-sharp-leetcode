@@ -1,0 +1,15 @@
+public class Solution {
+    public int LengthOfLongestSubstring(string s) {
+        HashSet<Char> a=new HashSet<Char>();
+        int l=0,m=0,r;
+        for (r = 0; r < s.Length; r++) {
+            while(a.Contains(s[r])){
+                a.remove(s.[l]);
+                l++;
+            }
+            a.add(s[r]);
+            m=Math.max(m,r-l+1);
+        }
+        return m;
+    }
+}

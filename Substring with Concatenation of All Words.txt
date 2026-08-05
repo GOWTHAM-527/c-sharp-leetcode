@@ -1,0 +1,64 @@
+public class Solution {
+    public IList<int> FindSubstring(string s, string[] words) {
+        IList<int> result = new List<int>();
+        if (string.IsNullOrEmpty(s) || words == null || words.Length == 0) {
+            return result;
+        }
+
+        int wordLen = words[0].Length;
+        int wordCount = words.Length;
+        int totalLen = wordLen * wordCount;
+        int sLen = s.Length;
+
+        if (sLen < totalLen) {
+            return result;
+        }
+
+        Dictionary<string, int> wordCounts = new Dictionary<string, int>();
+        foreach (string word in words) {
+            if (wordCounts.ContainsKey(word)) {
+                wordCounts[word]++;
+            } else {
+                wordCounts[word] = 1;
+            }
+        }
+
+        for (int i = 0; i < wordLen; i++) {
+            int left = i;
+            int right = i;
+            int matchCount = 0;
+            Dictionary<string, int> currentCounts = new Dictionary<string, int>();
+
+            while (right + wordLen <= sLen) {
+                string word = s.Substring(right, wordLen);
+                right += wordLen;
+
+                if (wordCounts.ContainsKey(word)) {
+                    if (currentCounts.ContainsKey(word)) {
+                        currentCounts[word]++;
+                    } else {
+                        currentCounts[word] = 1;
+                    }
+                    matchCount++;
+
+                    while (currentCounts[word] > wordCounts[word]) {
+                        string leftWord = s.Substring(left, wordLen);
+                        currentCounts[leftWord]--;
+                        matchCount--;
+                        left += wordLen;
+                    }
+
+                    if (matchCount == wordCount) {
+                        result.Add(left);
+                    }
+                } else {
+                    currentCounts.Clear();
+                    matchCount = 0;
+                    left = right;
+                }
+            }
+        }
+
+        return result;
+    }
+}
